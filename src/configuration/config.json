@@ -1,0 +1,14 @@
+{
+  "chrome": {
+    "browser": "chrome",
+    "headless_mode": false
+  },
+  "firefox": {
+    "browser": "firefox",
+    "headless_mode": false
+  },
+  "edge": {
+    "browser": "edge",
+    "headless_mode": false
+  }
+}
