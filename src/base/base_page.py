@@ -1,3 +1,4 @@
+import os
 import time
 
 from selenium.webdriver.common.by import By
@@ -6,10 +7,9 @@ from selenium.webdriver.support import expected_conditions as EC
 
 
 class WebPage:
-
-    def __init__(self, driver, url=''):
+    def __init__(self, driver, url=None):
         self._web_driver = driver
-        self.get(url)
+        self.get(self._set_url(url))
 
     def __setattr__(self, name, value):
         if not name.startswith('_'):
@@ -25,6 +25,24 @@ class WebPage:
             attr._page = self
 
         return attr
+
+    @staticmethod
+    def _set_url(url):
+        """ This function sets URL. """
+
+        if url and url.startswith('http'):
+            return url
+        else:
+            try:
+                base_url = os.environ['BASE_URL']
+            except KeyError:
+                raise Exception('BASE_URL environment variable is not set!')
+
+            if not url:
+                url = base_url
+            elif not url.startswith('http'):
+                url = base_url + url
+            return url
 
     def get(self, url):
         self._web_driver.get(url)
@@ -98,13 +116,13 @@ class WebPage:
 
                 assert ignore, 'JS error "{0}" on the page!'.format(log_message)
 
-    def wait_page_loaded(self, timeout=60, check_js_complete=True,
+    def wait_page_loaded(self, timeout=30, check_js_complete=True,
                          check_page_changes=False,
                          wait_for_element=None,
                          wait_for_xpath_to_disappear='',
-                         sleep_time=2):
+                         sleep_time=0):
         """ This function waits until the page will be completely loaded.
-            We use many different ways to detect is page loaded or not:
+            We use many ways to detect is page loaded or not:
             1) Check JS status
             2) Check modification in source code of the page
             3) Check that all images uploaded completely
@@ -123,8 +141,8 @@ class WebPage:
         source = ''
         try:
             source = self._web_driver.page_source
-        except:
-            pass
+        except Exception as e:
+            print(e)
 
         # Wait until page loaded (and scroll it, to make sure all objects will be loaded):
         while not page_loaded:
@@ -137,15 +155,15 @@ class WebPage:
                     self._web_driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
                     page_loaded = self._web_driver.execute_script("return document.readyState == 'complete';")
                 except Exception as e:
-                    pass
+                    print(e)
 
             if page_loaded and check_page_changes:
                 # Check if the page source was changed
                 new_source = ''
                 try:
                     new_source = self._web_driver.page_source
-                except:
-                    pass
+                except Exception as e:
+                    print(e)
 
                 page_loaded = new_source == source
                 source = new_source
@@ -168,7 +186,7 @@ class WebPage:
                     page_loaded = WebDriverWait(self._web_driver, 0.1).until(
                         EC.element_to_be_clickable(wait_for_element._locator)
                     )
-                except:
+                except TimeoutError:
                     pass  # Ignore timeout errors
 
             assert k < timeout, 'The page loaded more than {0} seconds!'.format(timeout)

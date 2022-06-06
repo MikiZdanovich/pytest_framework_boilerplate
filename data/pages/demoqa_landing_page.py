@@ -9,12 +9,8 @@ from src.utils.locator import Locator
 
 class LandingPage(WebPage):
     """This is sample test page"""
-    def __init__(self, driver, url=""):
-
-        if not url:
-            url = os.getenv('MAIN_URL')
-
-        super().__init__(driver, url)
+    def __init__(self, driver):
+        super().__init__(driver)
 
     @property
     def welcome_heading(self):

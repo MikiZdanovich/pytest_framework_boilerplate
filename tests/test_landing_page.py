@@ -1,16 +1,18 @@
 import pytest
-
+from pytest import mark
 
 from data.pages.demoqa_landing_page import LandingPage
 
 
-class TestLandingPage:
+@mark.landing_page
+class LandingPageSuite:
     """This is sample test case"""
 
-    @pytest.fixture(scope="function")
-    def landing_page(self, driver, url='http://the-internet.herokuapp.com/'):
-        return LandingPage(driver, url)
+    @pytest.fixture(autouse=True)
+    def landing_page(self, driver):
+        return LandingPage(driver)
 
+    @mark.smoke
     def test_header_text(self, landing_page):
         expected_header_text = 'Welcome to the-internet'
         actual_header_text = landing_page.welcome_heading.get_text()

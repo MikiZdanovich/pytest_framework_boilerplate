@@ -1,4 +1,4 @@
 selenium
 pytest
 webdriver-manager
-msedge-selenium-tools
+pytest-dotenv

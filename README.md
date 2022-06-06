@@ -10,7 +10,7 @@ How To Run Tests
 1) Install all requirements:
 
     ```bash
-    pip3 install -r requirements
+    pip3 install -r requirements.txt
     ```
     
 2) Run tests:
