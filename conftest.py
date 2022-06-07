@@ -9,21 +9,17 @@ def pytest_addoption(parser):
                      help="Browser to run tests")
 
 
-@pytest.fixture(scope="session")
-def browser_name(request):
-    return request.config.getoption("--browser").lower()
-
-
-# @pytest.fixture(scope='session')
-# def config(request):
-#     root_dir = str(request.config.rootdir)
-#     with open(os.path.join(root_dir, CONFIG_PATH)) as config_file:
-#         return json.load(config_file)
+def pytest_generate_tests(metafunc):
+    if "browser" in metafunc.fixturenames:
+        if "all" in metafunc.config.getoption("browser"):
+            metafunc.parametrize("browser", DriverFactory.SUPPORTED_BROWSERS)
+        else:
+            metafunc.parametrize("browser", [metafunc.config.getoption("browser")])
 
 
 @pytest.fixture
-def driver(browser_name):
-    driver = DriverFactory.get_driver(browser_name)
+def driver(browser):
+    driver = DriverFactory.get_driver(browser)
 
     yield driver
 

@@ -1,14 +1,13 @@
-import os
-
 from selenium.webdriver.common.by import By
 
 from src.base.base_page import WebPage
 from src.base.base_element import WebElement
-from src.utils.locator import Locator
+from src.base.locator import Locator
 
 
 class LandingPage(WebPage):
     """This is sample test page"""
+
     def __init__(self, driver):
         super().__init__(driver)
 
