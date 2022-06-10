@@ -15,12 +15,12 @@ class DriverFactory:
 
     @staticmethod
     def set_driver_options(browser, options):
-        browser_config = DriverConfig(browser).browser_config
-        for opt in browser_config:
-            options.add_argument(opt)
+        browser_config = DriverConfig.set_config(browser)
+        for option in browser_config:
+            options.add_argument(option)
 
     @staticmethod
-    def get_driver(browser, headless_mode=False):
+    def get_driver(browser, headless_mode=True):
 
         if browser == "chrome":
             options = webdriver.ChromeOptions()
@@ -30,7 +30,7 @@ class DriverFactory:
         elif browser == "firefox":
             options = webdriver.FirefoxOptions()
 
-            if headless_mode is True:
+            if headless_mode is False:
                 options.headless = True
             _driver = webdriver.Firefox
             service = FirefoxService(GeckoDriverManager().install())
@@ -42,6 +42,10 @@ class DriverFactory:
 
         driver = _driver(service=service, options=options)
 
-        driver.implicitly_wait(DriverConfig(browser).get_implicity_wait_time())
+        driver.implicitly_wait(DriverConfig.set_implicity_wait_time())
+        driver.set_page_load_timeout(DriverConfig.set_page_load_timeout())
+
+        if not headless_mode:
+            driver.maximize_window()
 
         return driver

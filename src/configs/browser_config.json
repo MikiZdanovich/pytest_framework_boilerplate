@@ -1,0 +1,16 @@
+{
+  "firefox": [
+    "--incognito",
+    "--disable-infobars",
+    "--no-sandbox"
+  ],
+  "chrome": [
+    "--incognito",
+    "--disable-infobars",
+    "--no-sandbox",
+    "--disable-dev-shm-usage",
+    "--disable-setuid-sandbox",
+    "--disable-gpu",
+    "--disable-extensions"
+  ]
+}

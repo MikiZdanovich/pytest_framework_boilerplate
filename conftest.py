@@ -1,5 +1,5 @@
 def pytest_addoption(parser):
     parser.addoption("--browser",
                      action="store",
-                     default="firefox",
+                     default="chrome",
                      help="Browser to run tests")

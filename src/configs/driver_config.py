@@ -1,12 +1,21 @@
 import os
-
+import json
 
 class Config:
-    def __init__(self, browser_name):
-        self.browser_config = {
-            'chrome': ("headless", "start-maximized", "incognito", "disable-infobars", "window-size=800x600"),
-            'firefox': ("start-maximized", "incognito", "disable-infobars", "window-size=800x600")
-        }[browser_name]
+    PATH = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'browser_config.json')
 
-    def get_implicity_wait_time(self):
-        return os.environ.get('IMPLICITY_WAIT_TIME', '10')
+    @staticmethod
+    def set_config(browser_name):
+        with open(Config.PATH, 'r') as config_file:
+            browser_config = json.loads(config_file.read())
+
+        return browser_config[browser_name]
+
+    @staticmethod
+    def set_implicity_wait_time(implicity_wait=10):
+        return implicity_wait
+
+    @staticmethod
+    def set_page_load_timeout(page_load_timeout=30):
+        return page_load_timeout
+
