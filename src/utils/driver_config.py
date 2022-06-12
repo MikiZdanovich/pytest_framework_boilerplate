@@ -5,7 +5,7 @@ from src.utils.json_parser import JsonParser
 
 class Config:
     _browser_config_name = 'browser_config.json'
-    _configs_path = os.path.join(os.path.abspath(os.path.dirname(__file__)), '..', 'configs')
+    _configs_path = 'data/configs'
     json_parser = JsonParser(_browser_config_name, _configs_path)
 
     @staticmethod

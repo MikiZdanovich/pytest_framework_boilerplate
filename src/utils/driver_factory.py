@@ -7,7 +7,7 @@ from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 
 from src.utils.custom_exceptions import UnsupportedBrowserException
-from src.configs.driver_config import Config as DriverConfig
+from src.utils.driver_config import Config as DriverConfig
 
 
 class DriverFactory:
