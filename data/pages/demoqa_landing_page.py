@@ -1,8 +1,6 @@
-from selenium.webdriver.common.by import By
-
+from data.locators.demoqa_landing_page import SetLandingPageLocators
 from src.base.base_page import WebPage
 from src.base.base_element import WebElement
-from src.base.locator import Locator
 
 
 class LandingPage(WebPage):
@@ -13,5 +11,4 @@ class LandingPage(WebPage):
 
     @property
     def welcome_heading(self):
-        header_locator = Locator(By.CLASS_NAME, 'heading')
-        return WebElement(header_locator)
+        return WebElement(SetLandingPageLocators.header_locator)

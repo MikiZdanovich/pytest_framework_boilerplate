@@ -17,3 +17,4 @@ class LandingPageSuite:
         expected_header_text = 'Welcome to the-internet'
         actual_header_text = landing_page.welcome_heading.get_text()
         assert actual_header_text == expected_header_text
+
