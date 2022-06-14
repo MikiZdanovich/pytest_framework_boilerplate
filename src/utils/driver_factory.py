@@ -6,8 +6,8 @@ from selenium.webdriver.firefox.service import Service as FirefoxService
 from webdriver_manager.chrome import ChromeDriverManager
 from webdriver_manager.firefox import GeckoDriverManager
 
-from src.utils.custom_exceptions import UnsupportedBrowserException
-from src.utils.driver_config import Config as DriverConfig
+from src.exceptions.custom_exceptions import UnsupportedBrowserException
+from src.utils.driver_config_parser import Config as DriverConfig
 
 
 class DriverFactory:

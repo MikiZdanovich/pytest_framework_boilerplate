@@ -7,7 +7,6 @@ from selenium.webdriver.common.keys import Keys
 
 
 class WebElement:
-    # _locator = ('', '')
     _web_driver = None
     _page = None
     _timeout = 10

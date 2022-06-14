@@ -1,6 +1,6 @@
 import os
 import time
-
+from urllib.parse import urljoin
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
@@ -41,7 +41,7 @@ class WebPage:
             if not url:
                 url = base_url
             elif not url.startswith('http'):
-                url = base_url + url
+                url = urljoin(base_url, url)
             return url
 
     def get(self, url):
