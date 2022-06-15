@@ -1,3 +1,5 @@
+
+
 class UnsupportedBrowserException(Exception):
     """Exception raised for unsupported browsers.
 

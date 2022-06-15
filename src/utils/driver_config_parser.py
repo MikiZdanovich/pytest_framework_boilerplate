@@ -3,7 +3,7 @@ from src.helpers.json_parser import JsonParser
 
 class Config:
     _browser_config_name = 'browser_config.json'
-    _configs_path = 'data/configs'
+    _configs_path = 'configs'
     json_parser = JsonParser(_browser_config_name, _configs_path)
 
     @staticmethod

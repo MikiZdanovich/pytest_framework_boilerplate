@@ -1,21 +1,37 @@
-from src.exceptions.validation_errors import ValidationErrors
+from src.exceptions.validation_errors import ValidationError, ValidationErrorMessage
 
 
 class BaseResponse:
-    def __int__(self, response):
+    def __init__(self, response):
         self.response = response
         self.response_status_code = self.response.status_code
         self.response_json = self.response.json()
-        self.response_data = self.response_json.get('data')
-        self.response_metadata= self.response_json.get('metadata')
+
+    def _get_response_data(self):
+        try:
+            if isinstance(self.response_json, dict):
+                return self.response_json['data']
+            else:
+                return [obj['data'] for obj in self.response_json]
+        except KeyError:
+            raise ValidationError(ValidationErrorMessage.MissingData.value)
+
+    def _get_response_metadata(self):
+        try:
+            if isinstance(self.response_json, dict):
+                return self.response_json['metadata']
+            else:
+                return [obj['metadata'] for obj in self.response_json]
+        except KeyError:
+            raise ValidationError(ValidationErrorMessage.MissingMetadata.value)
 
     def validate_status_code(self, status_code):
         if isinstance(status_code, list):
-            assert self.response_status_code in status_code, ValidationErrors.invalid_status_code(
+            assert self.response_status_code in status_code, ValidationError.invalid_status_code(
                 self.response_status_code, status_code)
         else:
 
-            assert self.response_status_code == status_code, ValidationErrors.invalid_status_code(
+            assert self.response_status_code == status_code, ValidationError.invalid_status_code(
                 self.response_status_code, status_code)
 
         return self

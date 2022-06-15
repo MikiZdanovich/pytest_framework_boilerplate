@@ -10,7 +10,7 @@ def pytest_generate_tests(metafunc):
             metafunc.parametrize("browser", [metafunc.config.getoption("browser")])
 
 
-@pytest.fixture
+@pytest.fixture(autouse=True)
 def driver(browser):
     driver = DriverFactory.get_driver(browser)
 
