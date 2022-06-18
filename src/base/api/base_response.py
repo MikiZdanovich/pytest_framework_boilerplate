@@ -1,4 +1,4 @@
-from src.exceptions.validation_errors import ValidationError, ValidationErrorMessage
+from src.exceptions.validation_errors import ValidationError, ValidationErrorMessage, StatusCodeException
 
 
 class BaseResponse:
@@ -27,11 +27,11 @@ class BaseResponse:
 
     def validate_status_code(self, status_code):
         if isinstance(status_code, list):
-            assert self.response_status_code in status_code, ValidationError.invalid_status_code(
+            assert self.response_status_code in status_code, StatusCodeException(
                 self.response_status_code, status_code)
         else:
 
-            assert self.response_status_code == status_code, ValidationError.invalid_status_code(
+            assert self.response_status_code == status_code, StatusCodeException(
                 self.response_status_code, status_code)
 
         return self

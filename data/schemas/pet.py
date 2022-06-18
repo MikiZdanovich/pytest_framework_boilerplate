@@ -10,7 +10,7 @@ class PetSchema(BaseModel):
     id: int = None
     category: CategorySchema = Field(None, alias='category')
     name: str = None
-    photoUrls: List[str]
+    photoUrls: List[str]=None
     tags: List[TagSchema] = None
     status: StatusSchema = Field(...)
 

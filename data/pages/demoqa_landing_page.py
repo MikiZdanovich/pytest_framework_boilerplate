@@ -1,6 +1,6 @@
 from data.locators.demoqa_landing_page import SetLandingPageLocators
-from src.base.base_page import WebPage
-from src.base.base_element import WebElement
+from src.base.ui.base_page import WebPage
+from src.base.ui.base_element import WebElement
 
 
 class LandingPage(WebPage):

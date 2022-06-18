@@ -12,6 +12,10 @@ class ValidationError(Exception):
         self.message = message
         super().__init__(self.message)
 
-    @staticmethod
-    def invalid_status_code(status_code, expected_status_code):
-        return ValidationErrorMessage.InvalidStatusCode.value.format(status_code, expected_status_code)
+
+class StatusCodeException(Exception):
+    def __init__(self, actual, expected):
+        self.actual = actual
+        self.expected = expected
+        self.message = ValidationErrorMessage.InvalidStatusCode.value.format(actual, expected)
+        super().__init__(self.message)

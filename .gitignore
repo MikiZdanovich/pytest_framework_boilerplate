@@ -4,3 +4,4 @@ venv/
 .idea/
 *.html
 *.xml
+allure-report/

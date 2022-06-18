@@ -1,15 +1,15 @@
-import os
 import time
-from urllib.parse import urljoin
 from selenium.webdriver.common.by import By
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from src.helpers.url_parser import set_url
 
 
 class WebPage:
     def __init__(self, driver, url=None):
         self._web_driver = driver
-        self.get(self._set_url(url))
+        self.get(self.url)
+        self.url = set_url(url)
 
     def __setattr__(self, name, value):
         if not name.startswith('_'):
@@ -25,24 +25,6 @@ class WebPage:
             attr._page = self
 
         return attr
-
-    @staticmethod
-    def _set_url(url):
-        """ This function sets URL. """
-
-        if url and url.startswith('http'):
-            return url
-        else:
-            try:
-                base_url = os.environ['BASE_URL']
-            except KeyError:
-                raise Exception('BASE_URL environment variable is not set!')
-
-            if not url:
-                url = base_url
-            elif not url.startswith('http'):
-                url = urljoin(base_url, url)
-            return url
 
     def get(self, url):
         self._web_driver.get(url)

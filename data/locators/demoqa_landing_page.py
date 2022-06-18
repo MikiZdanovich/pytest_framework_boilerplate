@@ -1,4 +1,4 @@
-from src.base.locator import Locator
+from src.base.ui.locator import Locator
 from selenium.webdriver.common.by import By
 
 
