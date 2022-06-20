@@ -12,12 +12,25 @@ How To Run Tests
     ```bash
     pip3 install -r requirements.txt
     ```
-    
-2) Run tests:
+2) Set up environment:
+
+    ```
+    configure .env file by provided template
+    ```    
+   
+
+3) Run tests:
 
  ```bash
-    python3 -m pytest -v --driver chrome  ~/tests/*
-    
-OR
+    python -m pytest --browser chrome  -m ui
+  ``` 
+
+ ```bash
+    python -m pytest -m api
+  ``` 
+   OR
     
     Via Pycharm
+  
+
+
