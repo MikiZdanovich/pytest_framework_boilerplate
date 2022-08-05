@@ -1,4 +1,4 @@
-class EnvironmentVariableExceptiom(Exception):
+class EnvironmentVariableException(Exception):
     """ This class is used to raise an exception when the environment variable is not set. """
 
     def __init__(self, variable_key):

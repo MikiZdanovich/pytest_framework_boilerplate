@@ -5,3 +5,5 @@ venv/
 *.html
 *.xml
 allure-report/
+*__pycache__*
+logs/

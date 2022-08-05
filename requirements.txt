@@ -2,7 +2,5 @@ selenium
 pytest
 webdriver-manager
 pytest-dotenv
-pydantic
-Faker
 requests
 allure-pytest

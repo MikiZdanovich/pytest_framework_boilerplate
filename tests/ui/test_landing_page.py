@@ -5,6 +5,7 @@ from data.pages.demoqa_landing_page import LandingPage
 
 
 @mark.landing_page
+@mark.ui
 class LandingPageSuite:
     """This is sample test case"""
 

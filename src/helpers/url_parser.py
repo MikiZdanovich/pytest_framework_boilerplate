@@ -1,6 +1,7 @@
 import os
 from urllib.parse import urljoin
-from src.exceptions.custom_exceptions import EnvironmentVariableExceptiom
+from src.exceptions.custom_exceptions import EnvironmentVariableException
+
 
 def set_url(url):
     """ This function sets URL. """
@@ -11,7 +12,7 @@ def set_url(url):
         try:
             base_url = os.environ['BASE_URL']
         except KeyError:
-            raise Exception('BASE_URL environment variable is not set!')
+            raise EnvironmentVariableException('BASE_URL')
 
         if not url:
             url = base_url

@@ -1,3 +1,5 @@
+from json import JSONDecodeError
+
 from src.exceptions.validation_errors import ValidationError, ValidationErrorMessage, StatusCodeException
 
 
@@ -5,7 +7,7 @@ class BaseResponse:
     def __init__(self, response):
         self.response = response
         self.response_status_code = self.response.status_code
-        self.response_json = self.response.json()
+        self.response_json = self.get_json()
 
     def _get_response_data(self):
         try:
@@ -36,11 +38,8 @@ class BaseResponse:
 
         return self
 
-    def validate_response_schema(self, schema):
-        if isinstance(self.response_json, list):
-            for response_item in self.response_json:
-                schema.parse_obj(response_item)
-        else:
-            schema.parse_obj(self.response_json)
-
-        return self
+    def get_json(self):
+        try:
+            json = self.response.json()
+        except JSONDecodeError:
+            json = {}

@@ -186,7 +186,7 @@ class WebElement:
         # Add red border to the style:
         self._web_driver.execute_script("arguments[0].style.border='3px solid red'", element)
 
-        # Make screen-shot of the page:
+        # Make screenshot of the page:
         self._web_driver.save_screenshot(file_name)
 
     def scroll_to_element(self):
