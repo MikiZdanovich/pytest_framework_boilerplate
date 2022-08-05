@@ -10,4 +10,4 @@ class PetStoreSuite:
     def test_get_pet_by_id(self, get_pets_by_status):
         """This is sample test case"""
         response = BaseResponse(get_pets_by_status('available'))
-        response.validate_status_code(20)
+        response.validate_status_code(200)

@@ -1,4 +1,4 @@
-from src.helpers.json_parser import JsonParser
+from src.utils.json_parser import JsonParser
 
 
 class Config:
