@@ -1,10 +1,4 @@
-from enum import Enum
-
-
-class ValidationErrorMessage(Enum):
-    MissingData = 'Data object is missing'
-    MissingMetadata = 'Metadata object is missing'
-    InvalidStatusCode = 'Invalid status code: {0} instead of {1}'
+from src.enums.validation_errors_enum import ValidationErrorMessage
 
 
 class ValidationError(Exception):

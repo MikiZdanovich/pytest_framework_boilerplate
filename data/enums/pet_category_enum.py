@@ -1,4 +1,4 @@
-from data.enums.base_enum import BaseEnum
+from src.base.enum.base_enum import BaseEnum
 
 
 class PetCategory(BaseEnum):
@@ -9,6 +9,3 @@ class PetCategory(BaseEnum):
     reptile = 'reptile'
     invertebrate = 'invertebrate'
 
-    @classmethod
-    def get_all(cls):
-        return [e.value for e in cls]

@@ -1,6 +1,4 @@
-selenium
-pytest
-webdriver-manager
-pytest-dotenv
-requests
-allure-pytest
+selenium~=4.2.0
+pytest~=7.1.2
+requests~=2.28.0
+Faker~=13.13.0

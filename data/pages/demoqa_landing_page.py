@@ -1,4 +1,4 @@
-from data.locators.demoqa_landing_page import SetLandingPageLocators
+from data.locators.demoqa_landing_page import LandingPageLocators
 from src.base.ui.base_page import WebPage
 from src.base.ui.base_element import WebElement
 
@@ -11,4 +11,7 @@ class LandingPage(WebPage):
 
     @property
     def welcome_heading(self):
-        return WebElement(SetLandingPageLocators.header_locator)
+        return WebElement(LandingPageLocators.header_locator)
+
+    def get_welcome_heading_text(self):
+        return self.welcome_heading.get_text()

@@ -16,6 +16,6 @@ class LandingPageSuite:
     @mark.smoke
     def test_header_text(self, landing_page):
         expected_header_text = 'Welcome to the-internet'
-        actual_header_text = landing_page.welcome_heading.get_text()
+        actual_header_text = landing_page.get_welcome_heading_text()
         assert actual_header_text == expected_header_text
 

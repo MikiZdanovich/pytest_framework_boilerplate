@@ -8,6 +8,16 @@ def _get_pets_by_status(status='available'):
     return response
 
 
+def _create_pet(pet):
+    response = request('POST', set_url('pet'), json=pet)
+    return response
+
+
 @pytest.fixture
 def get_pets_by_status():
     return _get_pets_by_status
+
+
+@pytest.fixture
+def create_pet():
+    return _create_pet
