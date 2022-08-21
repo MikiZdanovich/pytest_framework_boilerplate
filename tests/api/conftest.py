@@ -1,16 +1,14 @@
 import pytest
-from requests import request
-from src.utils.url_parser import set_url
+from src.base.api.http_client import RequestHandler
 
 
 def _get_pets_by_status(status='available'):
-    response = request('GET', set_url('pet/findByStatus'), params={"status": status})
-    return response
+    params = {"status": status}
+    return RequestHandler.get('pet/findByStatus', params=params)
 
 
 def _create_pet(pet):
-    response = request('POST', set_url('pet'), json=pet)
-    return response
+    return RequestHandler.post('pet', json=pet)
 
 
 @pytest.fixture

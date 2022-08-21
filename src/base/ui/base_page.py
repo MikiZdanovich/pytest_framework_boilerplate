@@ -1,19 +1,30 @@
-import time
-from selenium.webdriver.common.by import By
+from abc import ABC
+
 from selenium.webdriver.support.ui import WebDriverWait
 from selenium.webdriver.support import expected_conditions as EC
+from selenium.webdriver.remote.webdriver import WebDriver
 from src.utils.url_parser import set_url
 
+from src.exceptions.web_exceptions import PageTookTooLongToResponseException, WebElementNotFoundException, \
+    NotEnoughTimeToLocateElementException
+from selenium.common import StaleElementReferenceException, NoSuchElementException, TimeoutException
 
-class WebPage:
-    def __init__(self, driver, url=None):
+
+class BasePage(ABC):
+    """
+    Base class for all pages.
+    """
+
+
+class WebPage(BasePage):
+    def __init__(self, driver: WebDriver, url: str = None):
         self._web_driver = driver
-        self.url = set_url(url)
-        self.get(self.url)
+        self._url = set_url(url)
 
-    def get(self, url):
-        self._web_driver.get(url)
+    def open(self) -> BasePage:
+        self._web_driver.get(self._url)
         self.wait_page_loaded()
+        return self
 
     def go_back(self):
         self._web_driver.back()
@@ -23,10 +34,28 @@ class WebPage:
         self._web_driver.refresh()
         self.wait_page_loaded()
 
-    def screenshot(self, file_name='screenshot.png'):
+    def find_element(self, *locator):
+        """ Find element on the page. """
+
+        element = None
+
+        try:
+            element = self._web_driver.find_element(*locator)
+        except (StaleElementReferenceException, NoSuchElementException):
+            raise WebElementNotFoundException(locator)
+
+        return element
+
+    def wait_element(self, *locator, timeout: int = 10) -> None:
+        try:
+            WebDriverWait(self._web_driver, timeout).until(EC.presence_of_element_located(locator))
+        except TimeoutException:
+            raise NotEnoughTimeToLocateElementException(locator, timeout)
+
+    def screenshot(self, file_name: str = 'screenshot.png'):
         self._web_driver.save_screenshot(file_name)
 
-    def scroll_down(self, offset=0):
+    def scroll_down(self, offset: int = None):
         """ Scroll the page down. """
 
         if offset:
@@ -34,7 +63,7 @@ class WebPage:
         else:
             self._web_driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
 
-    def scroll_up(self, offset=0):
+    def scroll_up(self, offset: int = None) -> None:
         """ Scroll the page up. """
 
         if offset:
@@ -42,32 +71,31 @@ class WebPage:
         else:
             self._web_driver.execute_script('window.scrollTo(0, -document.body.scrollHeight);')
 
-    def switch_to_iframe(self, iframe):
+    def switch_to_iframe(self, iframe: str) -> None:
         """ Switch to iframe by it's name. """
 
         self._web_driver.switch_to.frame(iframe)
 
-    def switch_out_iframe(self):
+    def switch_out_iframe(self) -> None:
         """ Cancel iframe focus. """
         self._web_driver.switch_to.default_content()
 
-    def get_current_url(self):
+    def get_current_url(self) -> str:
         """ Returns current browser URL. """
-
         return self._web_driver.current_url
 
-    def get_page_source(self):
+    def get_page_source(self) -> str:
         """ Returns current page body. """
 
         source = ''
         try:
             source = self._web_driver.page_source
-        except:
-            print('Can not get page source', 'red')
+        except Exception as e:
+            print(f'Can not get page source', {e})
 
         return source
 
-    def check_js_errors(self, ignore_list=None):
+    def check_js_errors(self, ignore_list: list = None):
         """ This function checks JS errors on the page. """
 
         ignore_list = ignore_list or []
@@ -83,85 +111,13 @@ class WebPage:
 
                 assert ignore, 'JS error "{0}" on the page!'.format(log_message)
 
-    def wait_page_loaded(self, timeout=30, check_js_complete=True,
-                         check_page_changes=False,
-                         wait_for_element=None,
-                         wait_for_xpath_to_disappear='',
-                         sleep_time=0):
-        """ This function waits until the page will be completely loaded.
-            We use many ways to detect is page loaded or not:
-            1) Check JS status
-            2) Check modification in source code of the page
-            3) Check that all images uploaded completely
-               (Note: this check is disabled by default)
-            4) Check that expected elements presented on the page
+    def wait_page_loaded(self, timeout: int = 10) -> None:
+        """
+        Wait until page is loaded.
+        :@param timeout: timeout in seconds
         """
 
-        page_loaded = False
-        double_check = False
-        k = 0
-
-        if sleep_time:
-            time.sleep(sleep_time)
-
-        # Get source code of the page to track changes in HTML:
-        source = ''
-        try:
-            source = self._web_driver.page_source
-        except Exception as e:
-            print(e)
-
-        # Wait until page loaded (and scroll it, to make sure all objects will be loaded):
-        while not page_loaded:
-            time.sleep(0.5)
-            k += 1
-
-            if check_js_complete:
-                # Scroll down and wait when page will be loaded:
-                try:
-                    self._web_driver.execute_script('window.scrollTo(0, document.body.scrollHeight);')
-                    page_loaded = self._web_driver.execute_script("return document.readyState == 'complete';")
-                except Exception as e:
-                    print(e)
-
-            if page_loaded and check_page_changes:
-                # Check if the page source was changed
-                new_source = ''
-                try:
-                    new_source = self._web_driver.page_source
-                except Exception as e:
-                    print(e)
-
-                page_loaded = new_source == source
-                source = new_source
-
-            # Wait when some element will disappear:
-            if page_loaded and wait_for_xpath_to_disappear:
-                bad_element = None
-
-                try:
-                    bad_element = WebDriverWait(self._web_driver, 0.1).until(
-                        EC.presence_of_element_located((By.XPATH, wait_for_xpath_to_disappear))
-                    )
-                except TimeoutError:
-                    pass  # Ignore timeout errors
-
-                page_loaded = not bad_element
-
-            if page_loaded and wait_for_element:
-                try:
-                    page_loaded = WebDriverWait(self._web_driver, 0.1).until(
-                        EC.element_to_be_clickable(wait_for_element._locator)
-                    )
-                except TimeoutError:
-                    pass  # Ignore timeout errors
-
-            assert k < timeout, 'The page loaded more than {0} seconds!'.format(timeout)
-
-            # Check two times that page completely loaded:
-            if page_loaded and not double_check:
-                page_loaded = False
-                double_check = True
-
-        # Go up:
-        self._web_driver.execute_script('window.scrollTo(document.body.scrollHeight, 0);')
+        WebDriverWait(self._web_driver, timeout=timeout).until(
+            lambda wd: self._web_driver.execute_script("return document.readyState") == 'complete',
+            PageTookTooLongToResponseException(self._url, timeout)
+        )

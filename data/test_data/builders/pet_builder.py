@@ -16,7 +16,7 @@ class PetBuilder(BaseBuilder):
 
     def set_status(self, status=None):
         if not status:
-            status = self.fake.random_element(PetStatus.get_all())
+            status = self.fake.random_element(PetStatus.get_list())
         self.data['status'] = status
         return self
 

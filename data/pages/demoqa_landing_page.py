@@ -1,17 +1,17 @@
 from data.locators.demoqa_landing_page import LandingPageLocators
 from src.base.ui.base_page import WebPage
-from src.base.ui.base_element import WebElement
+from src.base.ui.locator import BaseLocator
+from selenium.webdriver.remote.webdriver import WebDriver
 
 
 class LandingPage(WebPage):
     """This is sample test page"""
 
-    def __init__(self, driver):
+    def __init__(self, driver: WebDriver, locators: BaseLocator() = LandingPageLocators):
         super().__init__(driver)
+        self.locators = locators()
 
     @property
-    def welcome_heading(self):
-        return WebElement(LandingPageLocators.header_locator)
-
-    def get_welcome_heading_text(self):
-        return self.welcome_heading.get_text()
+    def heading_text(self) -> str:
+        current_heading_text = self.find_element(*self.locators.header_locator).text
+        return current_heading_text

@@ -1,3 +1,9 @@
-from collections import namedtuple
+from abc import ABC
+from dataclasses import dataclass
 
-Locator = namedtuple('Locator', ['by', 'value'])
+
+@dataclass()
+class BaseLocator(ABC):
+    """
+    Base class for all locators.
+    """

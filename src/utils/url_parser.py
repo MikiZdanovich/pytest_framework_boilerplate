@@ -3,8 +3,12 @@ from urllib.parse import urljoin
 from src.exceptions.custom_exceptions import EnvironmentVariableException
 
 
-def set_url(url):
-    """ This function sets URL. """
+def set_url(url: str) -> str:
+    """
+    This function sets URL.
+    @param url: URL string. or endpoint string.
+    @return: URL string.
+    """
 
     if url and url.startswith('http'):
         return url
