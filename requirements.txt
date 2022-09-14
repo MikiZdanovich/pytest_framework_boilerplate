@@ -1,4 +1,7 @@
-selenium~=4.2.0
-pytest~=7.1.2
-requests~=2.28.0
-Faker~=13.13.0
+selenium>=4.4.3
+pytest>=7.1.2
+allure-pytest
+requests>=2.28.0
+Faker>=14.2.0
+webdriver-manager>=3.8.3
+pydantic>=1.10
