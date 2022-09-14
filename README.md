@@ -9,14 +9,14 @@ How To Run Tests
 
 1) Install all requirements:
 
-    ```bash
-    pip3 install -r requirements.txt
-    ```
+```bash
+  pip3 install -r requirements.txt
+```
 2) Set up environment:
 
-    ```
+```
     configure .env file by provided template
-    ```    
+```    
    
 
 3) Run tests:
